@@ -1,0 +1,31 @@
+/* App.css */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fdf6f0;
+  color: #333;
+}
+
+.App {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+.incident-list {
+  display: grid;
+  gap: 16px;
+}
+
+.incident-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  transition: all 0.3s ease;
+}
+
+.incident-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}

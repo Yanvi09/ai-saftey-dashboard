@@ -61,3 +61,43 @@ p {
   font-size: 1em;
   color: #555;
 }
+/* src/styles/main.css */
+
+/* Responsive Layout */
+.incident-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.incident-item {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: transform 0.3s;
+}
+
+.incident-item:hover {
+  transform: scale(1.05);
+}
+
+/* Form Styling */
+.report-incident-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.report-incident-form input,
+.report-incident-form textarea,
+.report-incident-form select {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+/* Error message styling */
+.error {
+  color: red;
+  font-size: 0.875rem;
+}

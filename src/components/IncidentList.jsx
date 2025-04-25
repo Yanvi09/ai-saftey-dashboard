@@ -2,6 +2,7 @@
 
 import React from "react";
 import { mockIncidents } from "../data/mockData";
+import EthicsBot from "./EthicsBot"; // Import the EthicsBot component
 
 const severityColors = {
   High: "bg-red-500 text-white",
@@ -42,6 +43,16 @@ const IncidentList = () => {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* EthicsBot Integration */}
+      <div className="mt-4">
+        {mockIncidents.map((incident) => (
+          <div key={incident.id} className="mb-6">
+            <h3 className="text-xl font-semibold mb-2">{incident.title}</h3>
+            <EthicsBot description={incident.description} />
+          </div>
+        ))}
       </div>
     </div>
   );

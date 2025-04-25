@@ -2,19 +2,15 @@
 import React from "react";
 import { mockIncidents } from "./data/mockData";
 import IncidentList from "./components/IncidentList";
-import IncidentMap from "./components/IncidentMap";
-import "./App.css";
+import ImpactTimelineGraph from "./components/ImpactTimelineGraph";
+import "./App.css"
 
 function App() {
   return (
-    <div className="App px-6 py-4 max-w-5xl mx-auto font-sans">
-      <h1 className="text-2xl font-bold mb-4 text-center">🛡️ AI Safety Incident Dashboard</h1>
-
-      {/* Incident List Section */}
+    <div className="App">
+      <h1>🛡️ AI Safety Incident Dashboard</h1>
       <IncidentList incidents={mockIncidents} />
-
-      {/* Incident Map Section */}
-      <IncidentMap />
+      <ImpactTimelineGraph incidents={mockIncidents} />
     </div>
   );
 }

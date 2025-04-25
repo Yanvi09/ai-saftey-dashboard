@@ -1,5 +1,4 @@
-// components/IncidentMap.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ComposableMap, Geographies, Geography, Marker } from "react-simple-maps";
 import { mockIncidents } from "../data/mockData";
 
@@ -19,6 +18,18 @@ const getColor = (severity) => {
 };
 
 const IncidentMap = () => {
+  // State to manage animation trigger
+  const [animating, setAnimating] = useState(false);
+
+  // Trigger animation after a short delay
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimating((prev) => !prev);
+    }, 1000); // Toggle animation every 1 second
+
+    return () => clearInterval(interval); // Clean up on component unmount
+  }, []);
+
   return (
     <div className="w-full bg-white shadow-lg rounded-xl p-4 mt-4">
       <h2 className="text-xl font-semibold mb-2">🌍 AI Incident Map</h2>
@@ -46,11 +57,11 @@ const IncidentMap = () => {
             coordinates={[incident.location.lon, incident.location.lat]}
           >
             <circle
-              r={6}
+              r={animating ? 8 : 6} // Animate size of the pin
               fill={getColor(incident.severity)}
               stroke="#fff"
               strokeWidth={1.5}
-              className="cursor-pointer"
+              className={`transition-all duration-1000`} // Smooth transition for size change
             />
             <title>{incident.title} — {incident.severity}</title>
           </Marker>

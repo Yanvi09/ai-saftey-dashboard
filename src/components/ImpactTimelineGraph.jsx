@@ -1,41 +1,40 @@
-// components/ImpactTimelineGraph.jsx
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend } from 'chart.js';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 
-// Register necessary components for Chart.js
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend);
 
 const ImpactTimelineGraph = ({ incidents }) => {
   const chartRef = useRef();
 
-  // Prepare data for the graph
   const getChartData = () => {
-    const labels = [];
-    const mediumData = [];
-    const highData = [];
-    const lowData = [];
+    const labelsSet = new Set();
+    const labelToCounts = {};
 
-    incidents.forEach(incident => {
+    incidents.forEach((incident) => {
       const date = new Date(incident.reported_at).toLocaleDateString();
-      if (!labels.includes(date)) {
-        labels.push(date);
+
+      if (!labelsSet.has(date)) {
+        labelsSet.add(date);
+        labelToCounts[date] = { High: 0, Medium: 0, Low: 0 };
       }
 
-      if (incident.severity === 'High') {
-        highData.push(1);
-        mediumData.push(0);
-        lowData.push(0);
-      } else if (incident.severity === 'Medium') {
-        highData.push(0);
-        mediumData.push(1);
-        lowData.push(0);
-      } else {
-        highData.push(0);
-        mediumData.push(0);
-        lowData.push(1);
-      }
+      labelToCounts[date][incident.severity] += 1;
     });
+
+    const labels = Array.from(labelsSet);
+    const highData = labels.map((date) => labelToCounts[date].High);
+    const mediumData = labels.map((date) => labelToCounts[date].Medium);
+    const lowData = labels.map((date) => labelToCounts[date].Low);
 
     return {
       labels,
@@ -65,10 +64,41 @@ const ImpactTimelineGraph = ({ incidents }) => {
     };
   };
 
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          title: (tooltipItems) => {
+            return `📅 ${tooltipItems[0].label}`;
+          },
+          label: (tooltipItem) => {
+            return `🛑 ${tooltipItem.dataset.label}: ${tooltipItem.formattedValue} incident(s)`;
+          },
+          afterBody: (tooltipItem) => {
+            const spikeThreshold = 5; // Define a threshold for what you consider a "spike"
+            const dataValue = tooltipItem[0].raw;
+            if (dataValue >= spikeThreshold) {
+              return '🚨 High spike detected!';
+            }
+            return '';
+          },
+        },
+        backgroundColor: '#333',
+        titleColor: '#fff',
+        bodyColor: '#fff',
+        displayColors: false,
+      },
+      legend: {
+        display: true,
+      },
+    },
+  };
+
   return (
     <div className="impact-timeline">
       <h2>🔺 Impact Timeline</h2>
-      <Line data={getChartData()} ref={chartRef} />
+      <Line data={getChartData()} options={chartOptions} ref={chartRef} />
     </div>
   );
 };

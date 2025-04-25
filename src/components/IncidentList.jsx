@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import { mockIncidents } from "../data/mockData";
 import IncidentItem from "./IncidentItem";
-import ReportIncidentForm from "./ReportIncidentForm"; // import the form
+import ReportIncidentForm from "./ReportIncidentForm"; // Import the form
+import ImpactTimelineGraph from "./ImpactTimelineGraph"; // Import the ImpactTimelineGraph
 
 const IncidentList = () => {
   const [incidents, setIncidents] = useState(mockIncidents);
@@ -30,12 +31,17 @@ const IncidentList = () => {
 
   return (
     <div className="incident-list">
+      {/* Render the ImpactTimelineGraph */}
+      <ImpactTimelineGraph incidents={incidents} /> {/* Pass incidents data */}
+
+      {/* Incident Reporting Form */}
       <ReportIncidentForm addIncident={addIncident} /> {/* Add Form */}
 
       <div className="controls">
         {/* Filters and Sorting */}
       </div>
 
+      {/* Render the incident items */}
       {sortedIncidents.map((incident) => (
         <IncidentItem key={incident.id} incident={incident} />
       ))}
